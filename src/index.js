@@ -13,7 +13,17 @@ const puppeteer = require("puppeteer");
         await page.setDefaultNavigationTimeout(0); 
     
         await page.goto("https://www.gub.uy/ministerio-salud-publica/tematica/coronavirus");
-        await page.screenshot({ path: "foto.jpg" });
+        //await page.screenshot({ path: "foto.jpg" });  // captura de pantalla
+        await page.click(".Media a");
+        // await page.waitFor(10000); ya no se utiliza :(
+        await page.waitForSelector("[data-off-canvas-main-canvas]");
+        await page.waitForTimeout(5000);
+
+        const data = await page.evaluate(() => {
+            return document.getElementsByClassName("Page-description")[0].childNodes[0].textContent;
+        });
+
+        console.log(data);
     
         await browser.close();  // al final, cerramos el navegador
     } catch(error) {
